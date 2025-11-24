@@ -1,0 +1,22 @@
+name: Post welcome comment
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  welcome:
+    name: Post welcome comment
+    runs-on: ubuntu-latest
+    steps:
+      # Use Github CLI to call Github API to comment on the PR. 
+      - name: Post comment
+        run: gh pr comment "$PR_URL" --body "Welcome to the repository!"
+      # GITHUB_TOKEN combined with permissions allows commenting on the PR   
+      # PR_URL is an environmental variable that makes it easier to reference the PR URL (instead of typing out context)  
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
